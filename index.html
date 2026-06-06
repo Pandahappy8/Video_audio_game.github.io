@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>視訊機櫃任務模擬器</title>
+    <title>音響 視訊操作模擬器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -85,7 +85,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
                 </svg>
-                視訊路由訓練任務
+                音響視訊操作訓練
             </h1>
         </div>
     </header>
@@ -144,7 +144,7 @@
                     <div>
                         <div class="flex justify-between px-2 mb-2">
                             <script>
-                                for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">OUT ${i}</span>`);
+                                for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">OUT<br>${i}</span>`);
                             </script>
                         </div>
                         <div class="flex justify-between px-2 gap-2">
@@ -178,7 +178,7 @@
                             <tr>
                                 <td class="font-bold">IN</td>
                                 <td>禪堂<br>SP-1</td>
-                                <td>禪堂泉<br>SP-2</td>
+                                <td>禪堂東<br>SP-2</td>
                                 <td>禪堂<br>NB</td>
                                 <td>禪堂<br>無線</td>
                                 <td>禪堂<br>DV</td>
@@ -189,8 +189,8 @@
                             <tr>
                                 <td class="font-bold">OUT</td>
                                 <td>禪堂</td>
-                                <td>講堂<br>東室</td>
-                                <td>講堂<br>西室</td>
+                                <td>講堂<br>東單</td>
+                                <td>講堂<br>西單</td>
                                 <td style="font-size: 0.65rem;">知客室<br>兒童室</td>
                                 <td>會議室</td>
                                 <td>備用</td>
@@ -207,44 +207,44 @@
         </div>
 
         <div class="xl:w-2/5 flex flex-col">
-            <h2 class="text-lg font-bold text-gray-300 mb-4 px-2 hidden xl:block">視訊螢幕牆 (Monitor Wall)</h2>
+            <h2 class="text-lg font-bold text-gray-300 mb-4 px-2 hidden xl:block">視訊螢幕 (Monitor Wall)</h2>
             <div class="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 flex-1 h-full min-h-[400px]">
                 
-                <!-- 螢幕 1: 左上 (OUT 8 - D畫面主控) -->
+                <!-- 螢幕 1: 左上 (CAM1 畫面) -->
                 <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 pointer-events-none border border-gray-600">
-                        左上 (OUT 8 - D畫面)
+                        左上 (CAM1 畫面)
                     </div>
                     <!-- 預設 Color Bars -->
                     <div class="absolute inset-0 color-bars"></div>
                     <!-- 禪堂影像 (當條件滿足時顯示) -->
-                    <img id="zen-hall-img" src="https://images.unsplash.com/photo-1596524430615-b46475ddff6e?auto=format&fit=crop&w=800&q=80" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
+                    <img id="CAM1-img" src="image/Cam1.jpg" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
                     <!-- 畫面狀態標籤 -->
                     <div id="screen1-label" class="absolute bottom-1 w-full text-center text-white bg-black/60 text-xs py-1 z-10 opacity-0 transition-opacity">
                         禪堂 (NB)
                     </div>
                 </div>
 
-                <!-- 螢幕 2: 右上 (OUT 1 - 禪堂) -->
+                <!-- 螢幕 2: 右上 (CAM 2 畫面) -->
                 <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
-                        右上 (OUT 1 - 禪堂)
+                        右上 (CAM 2 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
                 </div>
 
-                <!-- 螢幕 3: 左下 (OUT 2 - 講堂東) -->
+                <!-- 螢幕 3: 左下 (OUT 7 畫面) -->
                 <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
-                        左下 (OUT 2 - 講堂東)
+                        左下 (OUT 7 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
                 </div>
 
-                <!-- 螢幕 4: 右下 (OUT 3 - 講堂西) -->
+                <!-- 螢幕 4: 右下 (OUT 8 畫面) -->
                 <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
-                        右下 (OUT 3 - 講堂西)
+                        右下 (OUT 8 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
                 </div>
@@ -268,8 +268,8 @@
             const screen1Label = document.getElementById('screen1-label');
 
             // 名稱對應表 (用於顯示狀態)
-            const inNames = ["", "禪堂SP-1", "禪堂泉SP-2", "禪堂NB", "禪堂無線", "禪堂DV", "講堂筆電", "講堂DV", "主控NB"];
-            const outNames = ["", "禪堂", "講堂東室", "講堂西室", "知客室/兒童室", "會議室", "備用", "C畫面", "D畫面"];
+            const inNames = ["", "禪堂SP-1", "禪堂東SP-2", "禪堂NB", "禪堂無線", "禪堂DV", "講堂筆電", "講堂DV", "主控NB"];
+            const outNames = ["", "禪堂", "講堂東單", "講堂西單", "知客室/兒童室", "會議室", "備用", "C畫面", "D畫面"];
 
             // 處理 IN 按鈕點擊
             inButtons.forEach(btn => {
