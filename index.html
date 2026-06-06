@@ -92,41 +92,46 @@
 
     <main class="flex-1 flex flex-col xl:flex-row p-4 gap-6 max-w-[1600px] mx-auto w-full">
         
-        <!-- 左側：機櫃控制面板區 -->
         <div class="xl:w-3/5 flex flex-col gap-4">
             
-            <!-- 任務說明區塊 -->
             <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg">
-                <h2 class="text-lg font-bold text-yellow-400 mb-2">任務說明</h2>
-                <ul class="list-disc list-inside text-gray-300 space-y-1 text-sm md:text-base">
-                    <li>任務一：請操作面板，將 <strong class="text-white">IN 3</strong> 與 <strong class="text-white">OUT 1</strong> 連線。</li>
-                    <li>任務二：請操作面板，將 <strong class="text-white">IN 3</strong> 與 <strong class="text-white">OUT 8</strong> 連線，觀察螢幕畫面的變化。</li>
-                </ul>
+                <h2 class="text-lg font-bold text-yellow-400 mb-3">任務說明</h2>
+                
+                <div class="text-gray-300 space-y-3 text-sm md:text-base mb-4">
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="1" class="mt-1 w-4 h-4 accent-yellow-400" checked>
+                        <span><strong class="text-white">任務一：</strong>兒童班的視訊操作模式，需在 OUT 8 顯示住持筆電 (IN 6) 的畫面。</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="2" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務二：</strong>夜間禪修課的視訊操作模式，需在 OUT 7 顯示禪堂 (IN 1) 的畫面。</span>
+                    </label>
+                </div>
+
                 <div class="mt-4 p-3 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700">
-                    <div>
-                        <span class="text-sm text-gray-400 block">目前系統狀態：</span>
-                        <span id="status-text" class="text-white font-mono font-semibold">等待操作...</span>
+                    <div class="flex-1">
+                        <span class="text-sm text-gray-400 block mb-1">目前系統狀態：</span>
+                        <div id="status-text" class="text-white font-mono font-semibold min-h-[48px] flex flex-col justify-center">
+                            等待操作...
+                        </div>
                     </div>
-                    <button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-colors">
+                    <button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 ml-4 rounded-lg font-bold shadow transition-colors shrink-0">
                         重置連線
                     </button>
                 </div>
             </div>
 
             <div class="hardware-panel rounded-xl p-4 md:p-6 flex flex-col lg:flex-row gap-6 relative overflow-hidden">
-                <!-- 螺絲裝飾 -->
                 <div class="absolute top-2 left-2 w-3 h-3 rounded-full bg-gray-400 shadow-inner"></div>
                 <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-gray-400 shadow-inner"></div>
                 <div class="absolute bottom-2 left-2 w-3 h-3 rounded-full bg-gray-400 shadow-inner"></div>
                 <div class="absolute bottom-2 right-2 w-3 h-3 rounded-full bg-gray-400 shadow-inner"></div>
 
-                <!-- 按鈕區域 (左半部) -->
                 <div class="flex-1 grid grid-rows-2 gap-y-8">
-                    <!-- IN 按鈕排 -->
                     <div>
                         <div class="flex justify-between px-2 mb-2">
                             <script>
-                                for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">IN ${i}</span>`);
+                                for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">IN<br>${i}</span>`);
                             </script>
                         </div>
                         <div class="flex justify-between px-2 gap-2">
@@ -140,7 +145,6 @@
                         </div>
                     </div>
                     
-                    <!-- OUT 按鈕排 -->
                     <div>
                         <div class="flex justify-between px-2 mb-2">
                             <script>
@@ -210,76 +214,85 @@
             <h2 class="text-lg font-bold text-gray-300 mb-4 px-2 hidden xl:block">視訊螢幕 (Monitor Wall)</h2>
             <div class="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 flex-1 h-full min-h-[400px]">
                 
-                <!-- 螢幕 1: 左上 (CAM1 畫面) -->
                 <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 pointer-events-none border border-gray-600">
                         左上 (CAM1 畫面)
                     </div>
-                    <!-- 預設 Color Bars -->
                     <div class="absolute inset-0 color-bars"></div>
-					<img id="CAM1-img" src="image/Cam1.jpg" alt="CAM2 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
-                    <!-- 畫面狀態標籤 -->
-                    <div id="screen1-label" class="absolute bottom-1 w-full text-center text-white bg-black/60 text-xs py-1 z-10 opacity-0 transition-opacity">
-                        禪堂 (NB)
-					</div>
+                    <img id="CAM1-img" src="image/Cam1.jpg" alt="CAM1 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
                 </div>
 
-                <!-- 螢幕 2: 右上 (CAM 2 畫面) -->
                 <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
                         右上 (CAM 2 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
-					<img id="CAM2-img" src="image/Cam2.jpg" alt="CAM2 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
+                    <img id="CAM2-img" src="image/Cam2.jpg" alt="CAM2 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
                 </div>
 
-                <!-- 螢幕 3: 左下 (OUT 7 畫面) -->
-                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
+                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-colors duration-300">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
                         左下 (OUT 7 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
+                    <img id="Out7-img" src="image/Out7.jpg" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
                 </div>
 
-                <!-- 螢幕 4: 右下 (OUT 8 畫面) -->
-                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
+                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-colors duration-300">
                     <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
                         右下 (OUT 8 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
-					<!-- 禪堂影像 (當條件滿足時顯示) -->
-                    <img id="Out8-img" src="image/Out8.jpg" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
-
+                    <img id="Out8-img" src="image/Out8.jpg" alt="住持筆電" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
                 </div>
 
             </div>
         </div>
     </main>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             // 狀態變數
             let selectedIn = null;
             let selectedOut = null;
+            
+            // 任務追蹤變數
+            let currentTask = 1; // 預設任務一
+            let task1Completed = false;
+            let task2Completed = false;
 
             // DOM 元素
             const inButtons = document.querySelectorAll('.in-btn');
             const outButtons = document.querySelectorAll('.out-btn');
             const statusText = document.getElementById('status-text');
             const resetBtn = document.getElementById('reset-btn');
-            const zenHallImg = document.getElementById('Out8-img');
-            const screen1Label = document.getElementById('screen1-label');
+            const taskRadios = document.querySelectorAll('input[name="task_mode"]');
 
-            // 名稱對應表 (用於顯示狀態)
+            // 圖片元素
+            const out8Img = document.getElementById('Out8-img');
+            const out7Img = document.getElementById('Out7-img');
+
+            // 名稱對應表
             const inNames = ["", "禪堂SP-1", "禪堂東SP-2", "禪堂NB", "禪堂無線", "禪堂DV", "講堂筆電", "講堂DV", "主控NB"];
             const outNames = ["", "禪堂", "講堂東單", "講堂西單", "知客室/兒童室", "會議室", "備用", "C畫面", "D畫面"];
+
+            // 監聽單選按鈕切換
+            taskRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    currentTask = parseInt(e.target.value);
+                    // 切換任務時，自動清空當前未完成的操作按鈕，但不清空已完成的任務紀錄
+                    selectedIn = null;
+                    selectedOut = null;
+                    inButtons.forEach(b => b.classList.remove('active'));
+                    outButtons.forEach(b => b.classList.remove('active'));
+                    checkState();
+                });
+            });
 
             // 處理 IN 按鈕點擊
             inButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // 移除其他 IN 按鈕的 active
                     inButtons.forEach(b => b.classList.remove('active'));
-                    // 加上目前的 active
                     btn.classList.add('active');
                     selectedIn = parseInt(btn.getAttribute('data-val'));
                     checkState();
@@ -289,68 +302,85 @@
             // 處理 OUT 按鈕點擊
             outButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // 移除其他 OUT 按鈕的 active
                     outButtons.forEach(b => b.classList.remove('active'));
-                    // 加上目前的 active
                     btn.classList.add('active');
                     selectedOut = parseInt(btn.getAttribute('data-val'));
                     checkState();
                 });
             });
 
-            // 重置按鈕
+            // ★ 修改重點：重置按鈕邏輯
             resetBtn.addEventListener('click', () => {
+                // 1. 清空目前的按鈕選擇 (黃燈熄滅)
                 selectedIn = null;
                 selectedOut = null;
                 inButtons.forEach(b => b.classList.remove('active'));
                 outButtons.forEach(b => b.classList.remove('active'));
-                updateScreen(false);
-                statusText.textContent = "已重置。等待操作...";
-                statusText.className = "text-white font-mono font-semibold";
+                
+                // 2. 判斷當前是哪一個任務，只針對該任務進行重置
+                if (currentTask === 1) {
+                    task1Completed = false;
+                    if(out8Img) {
+                        out8Img.classList.remove('show');
+                        out8Img.parentElement.classList.replace('border-green-500', 'border-gray-800');
+                    }
+                } else if (currentTask === 2) {
+                    task2Completed = false;
+                    if(out7Img) {
+                        out7Img.classList.remove('show');
+                        out7Img.parentElement.classList.replace('border-green-500', 'border-gray-800');
+                    }
+                }
+
+                // 3. 重新呼叫 checkState 來更新下方的文字
+                checkState();
+                
+                // 4. 在原本的狀態文字後面，追加一個小小的重置提示
+                statusText.innerHTML += `<div class="text-gray-400 text-xs mt-1">(已重置任務 ${currentTask} 的連線進度)</div>`;
             });
 
             // 核心邏輯：檢查當前狀態並更新畫面
             function checkState() {
+                // 1. 檢查是否觸發任務完成
+                if (selectedIn && selectedOut) {
+                    // 任務一：選擇任務一且 IN 6 + OUT 8
+                    if (currentTask === 1 && selectedIn === 6 && selectedOut === 8) {
+                        task1Completed = true;
+                        out8Img.classList.add('show');
+                        out8Img.parentElement.classList.replace('border-gray-800', 'border-green-500');
+                    }
+                    // 任務二：選擇任務二且 IN 1 + OUT 7
+                    if (currentTask === 2 && selectedIn === 1 && selectedOut === 7) {
+                        task2Completed = true;
+                        out7Img.classList.add('show');
+                        out7Img.parentElement.classList.replace('border-gray-800', 'border-green-500');
+                    }
+                }
+
+                // 2. 構建狀態訊息
+                let statusHtml = '';
+
+                // 判斷任務完成訊息
+
+                if (task1Completed) statusHtml += `<div class="text-green-400 font-bold mb-1">✨ 完成任務1</div>`;
+                if (task2Completed) statusHtml += `<div class="text-green-400 font-bold mb-1">✨ 完成任務2</div>`;
+
+                // 當前連線狀態
                 if (selectedIn && selectedOut) {
                     const inName = inNames[selectedIn];
                     const outName = outNames[selectedOut];
-                    
-                    // 檢查任務一：IN 3 + OUT 1
-                    if (selectedIn === 3 && selectedOut === 1) {
-                        statusText.innerHTML = `<span class="text-green-400">連線成功：IN 3 (${inName}) 路由至 OUT 1 (${outName})。</span>`;
-                        updateScreen(false);
-                    }
-                    // 檢查任務二：IN 3 + OUT 8
-                    else if (selectedIn === 3 && selectedOut === 8) {
-                        statusText.innerHTML = `<span class="text-green-400 font-bold">✨ 任務達成！IN 3 (${inName}) 成功傳送影像至 OUT 8 (${outName})主螢幕。</span>`;
-                        updateScreen(true);
-                    }
-                    // 其他一般連線
-                    else {
-                        statusText.innerHTML = `<span class="text-blue-300">連線建立：IN ${selectedIn} (${inName}) -> OUT ${selectedOut} (${outName})</span>`;
-                        updateScreen(false);
-                    }
+                    statusHtml += `<div class="text-blue-300 text-sm mt-1">連線建立：IN ${selectedIn} (${inName}) -> OUT ${selectedOut} (${outName})</div>`;
                 } else if (selectedIn) {
-                    statusText.textContent = `已選擇來源 IN ${selectedIn} (${inNames[selectedIn]})，請選擇輸出目標 (OUT)。`;
-                    statusText.className = "text-yellow-400 font-mono font-semibold";
+                    statusHtml += `<div class="text-yellow-400 text-sm font-mono mt-1">已選擇來源 IN ${selectedIn} (${inNames[selectedIn]})，請選擇輸出目標 (OUT)。</div>`;
                 } else if (selectedOut) {
-                    statusText.textContent = `已選擇目標 OUT ${selectedOut} (${outNames[selectedOut]})，請選擇影像來源 (IN)。`;
-                    statusText.className = "text-yellow-400 font-mono font-semibold";
+                    statusHtml += `<div class="text-yellow-400 text-sm font-mono mt-1">已選擇目標 OUT ${selectedOut} (${outNames[selectedOut]})，請選擇影像來源 (IN)。</div>`;
                 }
-            }
 
-            // 更新左上角螢幕畫面
-            function updateScreen(showZenHall) {
-                if (showZenHall) {
-                    zenHallImg.classList.add('show');
-                    screen1Label.classList.remove('opacity-0');
-                    // 螢幕外框發光提示
-                    zenHallImg.parentElement.classList.replace('border-gray-800', 'border-green-500');
-                } else {
-                    zenHallImg.classList.remove('show');
-                    screen1Label.classList.add('opacity-0');
-                    zenHallImg.parentElement.classList.replace('border-green-500', 'border-gray-800');
+                if (statusHtml === '') {
+                    statusHtml = `<span class="text-white font-mono font-semibold">等待操作...</span>`;
                 }
+
+                statusText.innerHTML = statusHtml;
             }
         });
     </script>
