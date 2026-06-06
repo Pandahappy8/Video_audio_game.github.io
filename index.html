@@ -217,12 +217,11 @@
                     </div>
                     <!-- 預設 Color Bars -->
                     <div class="absolute inset-0 color-bars"></div>
-                    <!-- 禪堂影像 (當條件滿足時顯示) -->
-                    <img id="CAM1-img" src="image/Cam1.jpg" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
+					<img id="CAM1-img" src="image/Cam1.jpg" alt="CAM2 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
                     <!-- 畫面狀態標籤 -->
                     <div id="screen1-label" class="absolute bottom-1 w-full text-center text-white bg-black/60 text-xs py-1 z-10 opacity-0 transition-opacity">
                         禪堂 (NB)
-                    </div>
+					</div>
                 </div>
 
                 <!-- 螢幕 2: 右上 (CAM 2 畫面) -->
@@ -231,6 +230,7 @@
                         右上 (CAM 2 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
+					<img id="CAM2-img" src="image/Cam2.jpg" alt="CAM2 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
                 </div>
 
                 <!-- 螢幕 3: 左下 (OUT 7 畫面) -->
@@ -247,6 +247,9 @@
                         右下 (OUT 8 畫面)
                     </div>
                     <div class="absolute inset-0 color-bars"></div>
+					<!-- 禪堂影像 (當條件滿足時顯示) -->
+                    <img id="Out8-img" src="image/Out8.jpg" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
+
                 </div>
 
             </div>
@@ -264,7 +267,7 @@
             const outButtons = document.querySelectorAll('.out-btn');
             const statusText = document.getElementById('status-text');
             const resetBtn = document.getElementById('reset-btn');
-            const zenHallImg = document.getElementById('zen-hall-img');
+            const zenHallImg = document.getElementById('Out8-img');
             const screen1Label = document.getElementById('screen1-label');
 
             // 名稱對應表 (用於顯示狀態)
