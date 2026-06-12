@@ -7,82 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-
-        .color-bars {
-            background: linear-gradient(to right,
-                #c0c0c0 0%, #c0c0c0 14.28%,
-                #c0c000 14.28%, #c0c000 28.56%,
-                #00c0c0 28.56%, #00c0c0 42.84%,
-                #00c000 42.84%, #00c000 57.12%,
-                #c000c0 57.12%, #c000c0 71.4%,
-                #c00000 71.4%, #c00000 85.68%,
-                #0000c0 85.68%, #0000c0 100%
-            );
-        }
-
-        /* 機櫃實體質感樣式 */
-        .hardware-panel {
-            background: linear-gradient(180deg, #8a8d91 0%, #75787c 100%);
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 10px 20px rgba(0,0,0,0.5);
-        }
-
-        /* 按鈕基礎樣式與發光效果 */
-        .matrix-btn {
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.8);
-        }
-        
-        .matrix-btn:active {
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
-            transform: translateY(2px);
-        }
-
-        .matrix-btn.active {
-            background-color: #fde047; /* 黃色 */
-            box-shadow: 0 0 15px 5px rgba(253, 224, 71, 0.6), inset 0 2px 4px rgba(255,255,255,0.8);
-            border-color: #eab308;
-        }
-
-        /* 標籤貼紙樣式 */
-        .sticker-table {
-            background-color: #f8fafc;
-            color: #0f172a;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        .sticker-table th, .sticker-table td {
-            border: 1px solid #475569;
-            padding: 4px;
-            text-align: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .black-cell {
-            background-color: #1e293b;
-            color: #ffffff;
-        }
-
-        /* 螢幕影像淡入效果 */
-        .screen-img {
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        .screen-img.show {
-            opacity: 1;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #1a1a1a; color: #ffffff; }
+        .color-bars { background: linear-gradient(to right, #c0c0c0 0%, #c0c0c0 14.28%, #c0c000 14.28%, #c0c000 28.56%, #00c0c0 28.56%, #00c0c0 42.84%, #00c000 42.84%, #00c000 57.12%, #c000c0 57.12%, #c000c0 71.4%, #c00000 71.4%, #c00000 85.68%, #0000c0 85.68%, #0000c0 100%); }
+        .hardware-panel { background: linear-gradient(180deg, #8a8d91 0%, #75787c 100%); box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 10px 20px rgba(0,0,0,0.5); }
+        .matrix-btn { transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.8); }
+        .matrix-btn:active { box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2); transform: translateY(2px); }
+        .matrix-btn.active { background-color: #fde047; box-shadow: 0 0 15px 5px rgba(253, 224, 71, 0.6), inset 0 2px 4px rgba(255,255,255,0.8); border-color: #eab308; }
+        .sticker-table { background-color: #f8fafc; color: #0f172a; border-collapse: collapse; width: 100%; }
+        .sticker-table th, .sticker-table td { border: 1px solid #475569; padding: 4px; text-align: center; font-size: 0.75rem; font-weight: 600; }
+        .black-cell { background-color: #1e293b; color: #ffffff; }
+        .screen-img { opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .screen-img.show { opacity: 1; }
+        .task-container { max-height: 220px; overflow-y: auto; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #4b5563 #1f2937; }
+        .task-container::-webkit-scrollbar { width: 8px; }
+        .task-container::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
+        .task-container::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 4px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <header class="bg-gray-800 border-b border-gray-700 p-4 shadow-md z-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <h1 class="text-xl font-bold flex items-center gap-2 text-yellow-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
                 </svg>
                 音響視訊操作訓練
@@ -93,31 +40,55 @@
     <main class="flex-1 flex flex-col xl:flex-row p-4 gap-6 max-w-[1600px] mx-auto w-full">
         
         <div class="xl:w-3/5 flex flex-col gap-4">
-            
-            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg">
-                <h2 class="text-lg font-bold text-yellow-400 mb-3">任務說明</h2>
+            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg flex flex-col">
+                <h2 class="text-lg font-bold text-yellow-400 mb-3 shrink-0">任務說明</h2>
                 
-                <div class="text-gray-300 space-y-3 text-sm md:text-base mb-4">
+                <div class="task-container text-gray-300 space-y-3 text-sm md:text-base mb-4 flex-1">
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="1" class="mt-1 w-4 h-4 accent-yellow-400" checked>
-                        <span><strong class="text-white">任務一：</strong>兒童班的視訊操作模式，需在 OUT 8 顯示住持筆電 (IN 6) 的畫面。</span>
+                        <span><strong class="text-white">任務一：</strong>串流禪堂畫面。</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="2" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務二：</strong>夜間禪修課的視訊操作模式，需在 OUT 7 顯示禪堂 (IN 1) 的畫面。</span>
+                        <span><strong class="text-white">任務二：</strong>禪修班錄影。</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="3" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務三：</strong>禪修班投影。</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="4" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務四：</strong>兒童班/培訓無線圖傳。</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="5" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務五：</strong>兒童班/培訓 放影片。</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="6" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務六：</strong>音響室放影片。(提示：可複選輸出)</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="7" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務七：</strong>2樓講堂看禪堂畫面。(提示：可複選輸出)</span>
                     </label>
                 </div>
 
-                <div class="mt-4 p-3 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700">
+                <div class="mt-auto p-3 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700 shrink-0">
                     <div class="flex-1">
                         <span class="text-sm text-gray-400 block mb-1">目前系統狀態：</span>
-                        <div id="status-text" class="text-white font-mono font-semibold min-h-[48px] flex flex-col justify-center">
+                        <div id="status-text" class="text-white font-mono font-semibold min-h-[54px] flex flex-col justify-center">
                             等待操作...
                         </div>
                     </div>
-                    <button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 ml-4 rounded-lg font-bold shadow transition-colors shrink-0">
-                        重置連線
-                    </button>
+                    <div class="flex gap-2 ml-4 shrink-0">
+                        <button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-colors">
+                            重置連線
+                        </button>
+                        <button id="confirm-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-colors">
+                            確認答案
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -130,253 +101,259 @@
                 <div class="flex-1 grid grid-rows-2 gap-y-8">
                     <div>
                         <div class="flex justify-between px-2 mb-2">
-                            <script>
-                                for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">IN<br>${i}</span>`);
-                            </script>
+                            <script>for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">IN<br>${i}</span>`);</script>
                         </div>
                         <div class="flex justify-between px-2 gap-2">
-                            <script>
-                                for(let i=1; i<=8; i++) {
-                                    document.write(`
-                                        <button class="matrix-btn in-btn bg-gray-200 border border-gray-300 rounded w-8 h-8 md:w-10 md:h-10 flex-shrink-0" data-val="${i}"></button>
-                                    `);
-                                }
-                            </script>
+                            <script>for(let i=1; i<=8; i++) document.write(`<button class="matrix-btn in-btn bg-gray-200 border border-gray-300 rounded w-8 h-8 md:w-10 md:h-10 flex-shrink-0" data-val="${i}"></button>`);</script>
                         </div>
                     </div>
-                    
                     <div>
                         <div class="flex justify-between px-2 mb-2">
-                            <script>
-                                for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">OUT<br>${i}</span>`);
-                            </script>
+                            <script>for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">OUT<br>${i}</span>`);</script>
                         </div>
                         <div class="flex justify-between px-2 gap-2">
-                            <script>
-                                for(let i=1; i<=8; i++) {
-                                    document.write(`
-                                        <button class="matrix-btn out-btn bg-gray-200 border border-gray-300 rounded w-8 h-8 md:w-10 md:h-10 flex-shrink-0" data-val="${i}"></button>
-                                    `);
-                                }
-                            </script>
+                            <script>for(let i=1; i<=8; i++) document.write(`<button class="matrix-btn out-btn bg-gray-200 border border-gray-300 rounded w-8 h-8 md:w-10 md:h-10 flex-shrink-0" data-val="${i}"></button>`);</script>
                         </div>
                     </div>
                 </div>
 
                 <div class="w-full lg:w-[45%] bg-white p-2 rounded shadow-sm relative text-black flex flex-col justify-center">
                     <table class="sticker-table">
-                        <thead>
-                            <tr>
-                                <th>編 號</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7</th>
-                                <th>8</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>編 號</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
                         <tbody>
-                            <tr>
-                                <td class="font-bold">IN</td>
-                                <td>禪堂<br>SP-1</td>
-                                <td>禪堂東<br>SP-2</td>
-                                <td>禪堂<br>NB</td>
-                                <td>禪堂<br>無線</td>
-                                <td>禪堂<br>DV</td>
-                                <td>講堂<br>筆電</td>
-                                <td>講堂<br>DV</td>
-                                <td>主控<br>NB</td>
-                            </tr>
-                            <tr>
-                                <td class="font-bold">OUT</td>
-                                <td>禪堂</td>
-                                <td>講堂<br>東單</td>
-                                <td>講堂<br>西單</td>
-                                <td style="font-size: 0.65rem;">知客室<br>兒童室</td>
-                                <td>會議室</td>
-                                <td>備用</td>
-                                <td class="black-cell">C畫面<br><span style="font-size: 0.5rem">PRW</span></td>
-                                <td class="black-cell">D畫面<br><span style="font-size: 0.5rem">PRW/REC</span></td>
-                            </tr>
+                            <tr><td class="font-bold">IN</td><td>禪堂<br>SP-1</td><td>禪堂東<br>SP-2</td><td>禪堂<br>NB</td><td>禪堂<br>無線</td><td>禪堂<br>DV</td><td>講堂<br>筆電</td><td>講堂<br>DV</td><td>主控<br>NB</td></tr>
+                            <tr><td class="font-bold">OUT</td><td>禪堂</td><td>講堂<br>東單</td><td>講堂<br>西單</td><td style="font-size: 0.65rem;">知客室<br>兒童室</td><td>會議室</td><td>備用</td><td class="black-cell">C畫面</td><td class="black-cell">D畫面</td></tr>
                         </tbody>
                     </table>
-                    <div class="mt-2 text-xs font-semibold">
-                        開機預設：OUT 1、3為IN 3，OUT 2、4、5為IN 1，OUT 7、8為IN 3
-                    </div>
                 </div>
             </div>
         </div>
 
         <div class="xl:w-2/5 flex flex-col">
-            <h2 class="text-lg font-bold text-gray-300 mb-4 px-2 hidden xl:block">視訊螢幕 (Monitor Wall)</h2>
             <div class="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 flex-1 h-full min-h-[400px]">
-                
-                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
-                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 pointer-events-none border border-gray-600">
-                        左上 (CAM1 畫面)
-                    </div>
+                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-lg">
+                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">左上 (IN 1)</div>
                     <div class="absolute inset-0 color-bars"></div>
                     <img id="CAM1-img" src="image/Cam1.jpg" alt="CAM1 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
                 </div>
-
-                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)]">
-                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
-                        右上 (CAM 2 畫面)
-                    </div>
+                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-lg">
+                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">右上 (IN 2)</div>
                     <div class="absolute inset-0 color-bars"></div>
                     <img id="CAM2-img" src="image/Cam2.jpg" alt="CAM2 畫面" class="absolute inset-0 w-full h-full object-cover z-0">
                 </div>
-
-                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-colors duration-300">
-                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
-                        左下 (OUT 7 畫面)
-                    </div>
+                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-lg transition-colors duration-300">
+                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">左下 (輔助輸出)</div>
                     <div class="absolute inset-0 color-bars"></div>
-                    <img id="Out7-img" src="image/Out7.jpg" alt="禪堂" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
+                    <img id="dynamic-out-left-img" src="" alt="任務畫面左" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
                 </div>
-
-                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-colors duration-300">
-                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">
-                        右下 (OUT 8 畫面)
-                    </div>
+                <div class="bg-black border-4 border-gray-800 rounded-lg relative overflow-hidden flex flex-col shadow-lg transition-colors duration-300">
+                    <div class="absolute top-1 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10 border border-gray-600">右下 (任務輸出)</div>
                     <div class="absolute inset-0 color-bars"></div>
-                    <img id="Out8-img" src="image/Out8.jpg" alt="住持筆電" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
+                    <img id="dynamic-out-img" src="" alt="任務畫面右" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
                 </div>
-
             </div>
         </div>
     </main>
 
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 狀態變數
-            let selectedIn = null;
-            let selectedOut = null;
+            let selectedIns = []; 
+            let selectedOuts = []; 
+            let currentTask = 1; 
             
-            // 任務追蹤變數
-            let currentTask = 1; // 預設任務一
-            let task1Completed = false;
-            let task2Completed = false;
+            let taskResults = [null, null, null, null, null, null, null, null]; 
 
-            // DOM 元素
             const inButtons = document.querySelectorAll('.in-btn');
             const outButtons = document.querySelectorAll('.out-btn');
             const statusText = document.getElementById('status-text');
             const resetBtn = document.getElementById('reset-btn');
+            const confirmBtn = document.getElementById('confirm-btn'); 
             const taskRadios = document.querySelectorAll('input[name="task_mode"]');
 
-            // 圖片元素
-            const out8Img = document.getElementById('Out8-img');
-            const out7Img = document.getElementById('Out7-img');
-
-            // 名稱對應表
+            // ★ 抓取左下角和右下角的圖片元素
+            const dynamicOutImg = document.getElementById('dynamic-out-img');
+            const dynamicOutLeftImg = document.getElementById('dynamic-out-left-img');
+            
             const inNames = ["", "禪堂SP-1", "禪堂東SP-2", "禪堂NB", "禪堂無線", "禪堂DV", "講堂筆電", "講堂DV", "主控NB"];
             const outNames = ["", "禪堂", "講堂東單", "講堂西單", "知客室/兒童室", "會議室", "備用", "C畫面", "D畫面"];
 
-            // 監聽單選按鈕切換
+            function arraysEqual(a, b) {
+                if (a.length !== b.length) return false;
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) return false;
+                }
+                return true;
+            }
+
             taskRadios.forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     currentTask = parseInt(e.target.value);
-                    // 切換任務時，自動清空當前未完成的操作按鈕，但不清空已完成的任務紀錄
-                    selectedIn = null;
-                    selectedOut = null;
+                    selectedIns = [];
+                    selectedOuts = [];
                     inButtons.forEach(b => b.classList.remove('active'));
                     outButtons.forEach(b => b.classList.remove('active'));
                     checkState();
                 });
             });
 
-            // 處理 IN 按鈕點擊
+            // IN 按鈕邏輯
             inButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    inButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    selectedIn = parseInt(btn.getAttribute('data-val'));
+                    let val = parseInt(btn.getAttribute('data-val'));
+                    if (btn.classList.contains('active')) {
+                        btn.classList.remove('active');
+                        selectedIns = selectedIns.filter(v => v !== val);
+                    } else {
+                        if (selectedIns.length >= 2) {
+                            let oldVal = selectedIns.shift(); 
+                            document.querySelector(`.in-btn[data-val="${oldVal}"]`).classList.remove('active');
+                        }
+                        btn.classList.add('active');
+                        selectedIns.push(val);
+                    }
+                    selectedIns.sort((a, b) => a - b); 
                     checkState();
                 });
             });
 
-            // 處理 OUT 按鈕點擊
+            // OUT 按鈕邏輯
             outButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    outButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    selectedOut = parseInt(btn.getAttribute('data-val'));
+                    let val = parseInt(btn.getAttribute('data-val'));
+                    if (btn.classList.contains('active')) {
+                        btn.classList.remove('active');
+                        selectedOuts = selectedOuts.filter(v => v !== val);
+                    } else {
+                        if (selectedOuts.length >= 2) {
+                            let oldVal = selectedOuts.shift();
+                            document.querySelector(`.out-btn[data-val="${oldVal}"]`).classList.remove('active');
+                        }
+                        btn.classList.add('active');
+                        selectedOuts.push(val);
+                    }
+                    selectedOuts.sort((a, b) => a - b); 
                     checkState();
                 });
             });
 
-            // ★ 修改重點：重置按鈕邏輯
-            resetBtn.addEventListener('click', () => {
-                // 1. 清空目前的按鈕選擇 (黃燈熄滅)
-                selectedIn = null;
-                selectedOut = null;
+            // 確認答案邏輯
+            confirmBtn.addEventListener('click', () => {
+                if (selectedIns.length === 0 || selectedOuts.length === 0) {
+                    alert("請先選擇至少一組 IN 與 OUT 按鈕！");
+                    return;
+                }
+
+                let isCorrect = false;
+
+                // 任務判斷邏輯
+                if (currentTask === 1) isCorrect = (arraysEqual(selectedIns, [1]) && arraysEqual(selectedOuts, [8]));
+                else if (currentTask === 2) isCorrect = (arraysEqual(selectedIns, [3]) && arraysEqual(selectedOuts, [8]));
+                else if (currentTask === 3) isCorrect = (arraysEqual(selectedIns, [3]) && arraysEqual(selectedOuts, [1]));
+                else if (currentTask === 4) isCorrect = (arraysEqual(selectedIns, [4]) && arraysEqual(selectedOuts, [1]));
+                else if (currentTask === 5) isCorrect = (arraysEqual(selectedIns, [4]) && arraysEqual(selectedOuts, [8]));
+                else if (currentTask === 6) isCorrect = (arraysEqual(selectedIns, [8]) && arraysEqual(selectedOuts, [1, 8]));
+                else if (currentTask === 7) isCorrect = (arraysEqual(selectedIns, [1]) && arraysEqual(selectedOuts, [2, 3]));
+
+                taskResults[currentTask] = isCorrect ? 'correct' : 'wrong';
+
+                // ★ 統一的動態畫面顯示邏輯 ★
+                if (isCorrect) {
+                    // 1. 右下角畫面載入對應任務圖片 (Out1, Out2...)
+                    dynamicOutImg.src = `image/Out${currentTask}.jpg`;
+                    dynamicOutImg.classList.add('show');
+                    dynamicOutImg.parentElement.classList.replace('border-gray-800', 'border-green-500');
+
+                    // 2. 左下角畫面載入對應任務圖片 (Out1_1, Out1_2...)
+                    dynamicOutLeftImg.src = `image/Out1_${currentTask}.jpg`;
+                    dynamicOutLeftImg.classList.add('show');
+                    dynamicOutLeftImg.parentElement.classList.replace('border-gray-800', 'border-green-500');
+                }
+
+                // 自動跳下一題
+                if (currentTask < 7) {
+                    currentTask++;
+                    const nextRadio = document.querySelector(`input[name="task_mode"][value="${currentTask}"]`);
+                    nextRadio.checked = true;
+                    nextRadio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                // 清空燈號
+                selectedIns = [];
+                selectedOuts = [];
                 inButtons.forEach(b => b.classList.remove('active'));
                 outButtons.forEach(b => b.classList.remove('active'));
                 
-                // 2. 判斷當前是哪一個任務，只針對該任務進行重置
-                if (currentTask === 1) {
-                    task1Completed = false;
-                    if(out8Img) {
-                        out8Img.classList.remove('show');
-                        out8Img.parentElement.classList.replace('border-green-500', 'border-gray-800');
-                    }
-                } else if (currentTask === 2) {
-                    task2Completed = false;
-                    if(out7Img) {
-                        out7Img.classList.remove('show');
-                        out7Img.parentElement.classList.replace('border-green-500', 'border-gray-800');
+                checkState();
+
+                // 結算小視窗
+                let answeredCount = 0;
+                let correctCount = 0;
+                for (let i = 1; i <= 7; i++) {
+                    if (taskResults[i] !== null) {
+                        answeredCount++;
+                        if (taskResults[i] === 'correct') correctCount++;
                     }
                 }
 
-                // 3. 重新呼叫 checkState 來更新下方的文字
-                checkState();
-                
-                // 4. 在原本的狀態文字後面，追加一個小小的重置提示
-                statusText.innerHTML += `<div class="text-gray-400 text-xs mt-1">(已重置任務 ${currentTask} 的連線進度)</div>`;
+                if (answeredCount === 7) {
+                    setTimeout(() => {
+                        if (correctCount === 7) alert("🎉 恭喜你順利通關！");
+                        else alert(`僅對${correctCount}題，下次再加油喔！`);
+                    }, 300);
+                }
             });
 
-            // 核心邏輯：檢查當前狀態並更新畫面
+            // 重置按鈕邏輯
+            resetBtn.addEventListener('click', () => {
+                selectedIns = [];
+                selectedOuts = [];
+                inButtons.forEach(b => b.classList.remove('active'));
+                outButtons.forEach(b => b.classList.remove('active'));
+                
+                taskResults[currentTask] = null;
+                
+                // ★ 清除動態畫面的顯示 (右下與左下) ★
+                if (dynamicOutImg) {
+                    dynamicOutImg.classList.remove('show');
+                    dynamicOutImg.parentElement.classList.replace('border-green-500', 'border-gray-800');
+                }
+                if (dynamicOutLeftImg) {
+                    dynamicOutLeftImg.classList.remove('show');
+                    dynamicOutLeftImg.parentElement.classList.replace('border-green-500', 'border-gray-800');
+                }
+                
+                checkState();
+                statusText.innerHTML += `<div class="text-gray-400 text-xs mt-1">(已重置任務 ${currentTask} 的紀錄)</div>`;
+            });
+
+            // 系統狀態文字顯示
             function checkState() {
-                // 1. 檢查是否觸發任務完成
-                if (selectedIn && selectedOut) {
-                    // 任務一：選擇任務一且 IN 6 + OUT 8
-                    if (currentTask === 1 && selectedIn === 6 && selectedOut === 8) {
-                        task1Completed = true;
-                        out8Img.classList.add('show');
-                        out8Img.parentElement.classList.replace('border-gray-800', 'border-green-500');
-                    }
-                    // 任務二：選擇任務二且 IN 1 + OUT 7
-                    if (currentTask === 2 && selectedIn === 1 && selectedOut === 7) {
-                        task2Completed = true;
-                        out7Img.classList.add('show');
-                        out7Img.parentElement.classList.replace('border-gray-800', 'border-green-500');
+                let statusHtml = '<div class="flex flex-wrap gap-x-4 gap-y-1 mb-2 border-b border-gray-700 pb-2">';
+                
+                let hasResults = false;
+                for(let i=1; i<=7; i++) {
+                    if (taskResults[i] === 'correct') {
+                        statusHtml += `<div class="text-green-400 font-bold text-sm">🎉 任務${i}: 答對</div>`;
+                        hasResults = true;
+                    } else if (taskResults[i] === 'wrong') {
+                        statusHtml += `<div class="text-red-400 font-bold text-sm">❌ 任務${i}: 答錯</div>`;
+                        hasResults = true;
                     }
                 }
+                if (!hasResults) statusHtml = '<div>';
+                statusHtml += '</div>';
 
-                // 2. 構建狀態訊息
-                let statusHtml = '';
-
-                // 判斷任務完成訊息
-
-                if (task1Completed) statusHtml += `<div class="text-green-400 font-bold mb-1">✨ 完成任務1</div>`;
-                if (task2Completed) statusHtml += `<div class="text-green-400 font-bold mb-1">✨ 完成任務2</div>`;
-
-                // 當前連線狀態
-                if (selectedIn && selectedOut) {
-                    const inName = inNames[selectedIn];
-                    const outName = outNames[selectedOut];
-                    statusHtml += `<div class="text-blue-300 text-sm mt-1">連線建立：IN ${selectedIn} (${inName}) -> OUT ${selectedOut} (${outName})</div>`;
-                } else if (selectedIn) {
-                    statusHtml += `<div class="text-yellow-400 text-sm font-mono mt-1">已選擇來源 IN ${selectedIn} (${inNames[selectedIn]})，請選擇輸出目標 (OUT)。</div>`;
-                } else if (selectedOut) {
-                    statusHtml += `<div class="text-yellow-400 text-sm font-mono mt-1">已選擇目標 OUT ${selectedOut} (${outNames[selectedOut]})，請選擇影像來源 (IN)。</div>`;
-                }
-
-                if (statusHtml === '') {
+                if (selectedIns.length > 0 && selectedOuts.length > 0) {
+                    const inNamesStr = selectedIns.map(val => `IN ${val} (${inNames[val]})`).join(' 及 ');
+                    const outNamesStr = selectedOuts.map(val => `OUT ${val} (${outNames[val]})`).join(' 及 ');
+                    statusHtml += `<div class="text-blue-300 text-sm mt-1">目前選擇：${inNamesStr} -> ${outNamesStr}。<br>請點擊「確認答案」。</div>`;
+                } else if (selectedIns.length > 0) {
+                    const inNamesStr = selectedIns.map(val => `IN ${val} (${inNames[val]})`).join(' 及 ');
+                    statusHtml += `<div class="text-yellow-400 text-sm font-mono mt-1">已選擇來源 ${inNamesStr}，請選擇輸出目標 (OUT)。</div>`;
+                } else if (selectedOuts.length > 0) {
+                    const outNamesStr = selectedOuts.map(val => `OUT ${val}`).join(' 及 ');
+                    statusHtml += `<div class="text-yellow-400 text-sm font-mono mt-1">已選擇目標 ${outNamesStr}，請選擇影像來源 (IN)。</div>`;
+                } else if (!hasResults) {
                     statusHtml = `<span class="text-white font-mono font-semibold">等待操作...</span>`;
                 }
 
