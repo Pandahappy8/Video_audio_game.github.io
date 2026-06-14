@@ -58,11 +58,11 @@
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="4" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務四：</strong>用無線圖傳放兒童班/培訓簡報。</span>
+                        <span><strong class="text-white">任務四：</strong>用無線圖傳放兒童班/培訓簡報。(提示：可複選輸出)</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="5" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務五：</strong>2樓講堂看禪堂畫面。</span>
+                        <span><strong class="text-white">任務五：</strong>2樓講堂看禪堂畫面。(提示：可複選輸出)</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="6" class="mt-1 w-4 h-4 accent-yellow-400">
@@ -241,7 +241,7 @@
                 if (currentTask === 1) isCorrect = (arraysEqual(selectedIns, [1]) && arraysEqual(selectedOuts, [8]));
                 else if (currentTask === 2) isCorrect = (arraysEqual(selectedIns, [3]) && arraysEqual(selectedOuts, [8]));
                 else if (currentTask === 3) isCorrect = (arraysEqual(selectedIns, [3]) && arraysEqual(selectedOuts, [1]));
-                else if (currentTask === 4) isCorrect = (arraysEqual(selectedIns, [4]) && arraysEqual(selectedOuts, [1]));
+                else if (currentTask === 4) isCorrect = (arraysEqual(selectedIns, [4]) && arraysEqual(selectedOuts, [1, 8]));
                 else if (currentTask === 5) isCorrect = (arraysEqual(selectedIns, [1]) && arraysEqual(selectedOuts, [2, 3]));
                 else if (currentTask === 6) isCorrect = (arraysEqual(selectedIns, [8]) && arraysEqual(selectedOuts, [1, 8]));
 
