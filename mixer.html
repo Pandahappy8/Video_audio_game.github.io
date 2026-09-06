@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Temple Ui Mixer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111317;
+      --panel: #22262b;
+      --panel2: #191c20;
+      --edge: #050607;
+      --line: #343a40;
+      --text: #f4f4f4;
+      --cyan: #35f1ff;
+      --orange: #d36d32;
+      --red: #c93431;
+      --yellow: #e2d34b;
+      --green: #73e000;
+      --blue: #2c8dff;
+      --strip: 106px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #090a0c;
+      color: var(--text);
+      font-family: Arial, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      user-select: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .mixer-page {
+      display: grid;
+      grid-template-rows: 66px minmax(0, 1fr);
+      width: 100vw;
+      height: 100vh;
+      border: 2px solid #050607;
+      background: var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 7px 8px;
+      border-bottom: 2px solid #08090b;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, .38), transparent 7%, transparent 91%, rgba(0, 0, 0, .46)),
+        linear-gradient(#f4f4f4 0%, #b5b7ba 18%, #60656b 44%, #e3e4e5 63%, #5f646a 100%);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .85);
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .round-screws {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .screw {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #5c6268, #15171a 56%, #050607);
+      box-shadow: inset 1px 1px 1px rgba(255, 255, 255, .28);
+      z-index: 10;
+    }
+
+    .screw.tl { left: 7px; top: 7px; }
+    .screw.tr { right: 7px; top: 7px; }
+    .screw.bl { left: 7px; bottom: 7px; }
+    .screw.br { right: 7px; bottom: 7px; }
+
+    .meter-icon,
+    .transport,
+    .gear,
+    .ui-logo,
+    .clock,
+    .grill {
+      flex: 0 0 auto;
+    }
+
+    .meter-icon {
+      width: 43px;
+      height: 39px;
+      border: 1px solid #111;
+      border-radius: 4px;
+      background: linear-gradient(#4b5055, #181b1f);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .25), 0 2px 4px rgba(0, 0, 0, .5);
+      display: grid;
+      grid-template-columns: repeat(4, 5px);
+      align-items: end;
+      justify-content: center;
+      gap: 3px;
+      padding-bottom: 7px;
+    }
+
+    .meter-icon span {
+      display: block;
+      border-radius: 1px;
+      background: linear-gradient(#e9ecef, #7b8289);
+    }
+
+    .meter-icon span:nth-child(1) { height: 12px; }
+    .meter-icon span:nth-child(2) { height: 20px; }
+    .meter-icon span:nth-child(3) { height: 26px; }
+    .meter-icon span:nth-child(4) { height: 32px; }
+
+    .nav {
+      display: flex;
+      gap: 7px;
+      padding-right: 14px;
+      border-right: 1px solid rgba(0, 0, 0, .6);
+      box-shadow: 1px 0 rgba(255, 255, 255, .45);
+    }
+
+    .nav button,
+    .transport,
+    .gear {
+      height: 38px;
+      border: 1px solid #0a0b0c;
+      border-radius: 4px;
+      color: #e8e8e8;
+      text-shadow: 0 1px 2px #000;
+      background:
+        linear-gradient(rgba(255, 255, 255, .22), transparent 28%),
+        linear-gradient(#474b50, #181b1f);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .35), 0 2px 4px rgba(0, 0, 0, .55);
+      font-weight: 900;
+    }
+
+    .nav button {
+      min-width: 84px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    .nav button.active {
+      background:
+        linear-gradient(rgba(255, 255, 255, .28), transparent 26%),
+        linear-gradient(#e18b48, #ad4f1f 58%, #682711);
+      border-color: #421708;
+    }
+
+    .transport,
+    .gear {
+      width: 43px;
+      font-size: 20px;
+    }
+
+    .top-spacer {
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+
+    .grill {
+      width: 58px;
+      height: 48px;
+      display: grid;
+      grid-template-columns: repeat(4, 7px);
+      justify-content: center;
+      gap: 2px;
+      transform: skewX(13deg);
+      opacity: .95;
+    }
+
+    .grill span {
+      width: 6px;
+      height: 45px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #090a0b, #d5d5d5 45%, #16191d);
+      box-shadow: 1px 0 rgba(255, 255, 255, .45);
+    }
+
+    .clock {
+      display: grid;
+      place-items: center;
+      min-width: 146px;
+      height: 38px;
+      border: 2px solid #121416;
+      border-radius: 2px;
+      background:
+        linear-gradient(90deg, rgba(64, 255, 255, .07), transparent),
+        linear-gradient(#111a1c, #071012);
+      color: var(--cyan);
+      font: 900 15px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-shadow: 0 0 7px rgba(53, 241, 255, .8);
+      box-shadow: inset 0 0 16px rgba(53, 241, 255, .12), 0 1px 0 rgba(255, 255, 255, .35);
+    }
+
+    .ui-logo {
+      display: grid;
+      place-items: center;
+      width: 67px;
+      height: 38px;
+      border: 1px solid #151719;
+      border-radius: 3px;
+      background: linear-gradient(#4e5359, #15181c);
+      color: white;
+      font: italic 900 29px/1 Arial Black, Impact, sans-serif;
+      letter-spacing: 0;
+      box-shadow: inset 0 1px rgba(255, 255, 255, .32);
+    }
+
+    .board-scroll {
+      min-height: 0;
+      overflow: auto hidden;
+      background: #111418;
+    }
+
+    .board {
+      display: flex;
+      min-width: max-content;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .strip {
+      flex: 0 0 var(--strip);
+      width: var(--strip);
+      display: grid;
+      grid-template-rows: 42px 42px 46px minmax(0, 1fr) 33px;
+      border-right: 2px solid #07080a;
+      border-left: 1px solid #3a4046;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .08), transparent 20%, transparent 75%, rgba(0, 0, 0, .45)),
+        linear-gradient(#2b3036, #171a1f 18%, #20242a 48%, #14171b);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .1);
+      overflow: hidden;
+      transition: opacity .12s ease, box-shadow .12s ease, transform .12s ease;
+    }
+
+    .strip.selected {
+      box-shadow: inset 2px 0 var(--orange), inset -2px 0 var(--orange), inset 0 1px rgba(255, 255, 255, .1);
+    }
+
+    .strip.dragging {
+      opacity: .45;
+      transform: scale(.99);
+    }
+
+    .strip.drop-before {
+      box-shadow: -5px 0 0 #ff9549, inset 0 1px rgba(255, 255, 255, .1);
+    }
+
+    .strip.drop-after {
+      box-shadow: 5px 0 0 #ff9549, inset 0 1px rgba(255, 255, 255, .1);
+    }
+
+    .strip.master {
+      --strip: 118px;
+      position: sticky;
+      right: 0;
+      z-index: 4;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .08), transparent 20%, transparent 75%, rgba(0, 0, 0, .5)),
+        linear-gradient(#30353b, #181b20 18%, #24282e 52%, #15181c);
+      box-shadow: -8px 0 15px rgba(0, 0, 0, .56), inset 0 1px rgba(255, 255, 255, .12);
+    }
+
+    .readout-wrap {
+      display: grid;
+      place-items: center;
+      padding: 5px 5px 3px;
+      background: linear-gradient(#1d2227, #080a0c);
+    }
+
+    .readout {
+      width: 100%;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #080b0c;
+      border-radius: 2px;
+      background:
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 4px),
+        linear-gradient(90deg, rgba(77, 255, 255, .06), transparent),
+        #121d20;
+      color: var(--cyan);
+      font: 900 17px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-shadow: 0 0 7px rgba(53, 241, 255, .8);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .strip.master .readout {
+      color: #f2ee36;
+      text-shadow: 0 0 6px rgba(242, 238, 54, .8);
+    }
+
+    .trim {
+      display: grid;
+      place-items: center;
+      padding: 5px 8px;
+      background: linear-gradient(#30363c, #181b20);
+      border-top: 1px solid #40464d;
+      border-bottom: 1px solid #07080a;
+    }
+
+    .trim-track {
+      position: relative;
+      width: 100%;
+      height: 9px;
+      border: 1px solid #050607;
+      border-radius: 2px;
+      background: linear-gradient(#0e1012, #22262b);
+      box-shadow: inset 0 1px 3px #000;
+    }
+
+    .trim-track::after {
+      content: "";
+      position: absolute;
+      left: calc(var(--pan, 50%) - 5px);
+      top: -8px;
+      width: 10px;
+      height: 26px;
+      border: 1px solid #070809;
+      border-radius: 3px;
+      background:
+        linear-gradient(90deg, #e5e5e5, #5c6269 48%, #f4f4f4);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .7);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      align-items: center;
+      padding: 6px 6px 5px;
+      background: #22272d;
+    }
+
+    .small-btn {
+      height: 28px;
+      min-width: 0;
+      border: 1px solid #07080a;
+      border-radius: 4px;
+      background:
+        linear-gradient(rgba(255, 255, 255, .6), transparent 45%),
+        linear-gradient(#fafafa, #8c949c);
+      color: #202327;
+      font-weight: 900;
+      font-size: 12px;
+      text-shadow: 0 1px rgba(255, 255, 255, .58);
+      box-shadow: inset 0 1px #fff, 0 2px 4px rgba(0, 0, 0, .55);
+    }
+
+    .small-btn span {
+      display: inline-block;
+      border-bottom: 3px solid currentColor;
+      line-height: 1;
+    }
+
+    .small-btn.mute.on {
+      color: #fff;
+      text-shadow: 0 1px #5b0505;
+      background:
+        linear-gradient(rgba(255, 255, 255, .28), transparent 45%),
+        linear-gradient(#f05c57, #ad211e);
+    }
+
+    .small-btn.solo.on {
+      color: #202327;
+      background:
+        linear-gradient(rgba(255, 255, 255, .54), transparent 45%),
+        linear-gradient(#fff388, #bda735);
+    }
+
+    .fader-section {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 28px 1fr 26px;
+      gap: 5px;
+      padding: 6px 6px 2px;
+      position: relative;
+    }
+
+    .strip.master .fader-section {
+      grid-template-columns: 24px 24px 1fr;
+    }
+
+    .meter {
+      position: relative;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 3px 4px;
+      border-radius: 3px;
+      background: #0a0c0f;
+      border: 1px solid #030405;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, .85);
+    }
+
+    .meter::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      right: 7px;
+      bottom: 6px;
+      height: var(--level, 45%);
+      background:
+        linear-gradient(0deg, #1c9d22 0%, #65e000 64%, #f4dc00 82%, #ff7b00 92%, #ff3030 100%);
+      filter: saturate(1.2);
+    }
+
+    .meter.blue::before {
+      background: linear-gradient(0deg, #1965d6 0%, #3f9aff 55%, #65e000 85%);
+    }
+
+    .leds {
+      position: absolute;
+      inset: 6px 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .leds span {
+      height: 5px;
+      border-radius: 1px;
+      border-top: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(220, 230, 240, .22);
+      z-index: 1;
+    }
+
+    .meter-note {
+      position: absolute;
+      left: 31px;
+      top: 18px;
+      color: #c04345;
+      font-weight: 900;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .fader-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .fader-slot {
+      position: absolute;
+      top: 8px;
+      bottom: 20px;
+      width: 14px;
+      border: 1px solid #050607;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #07080a, #171b20 48%, #060708);
+      box-shadow: inset 0 1px 6px rgba(0, 0, 0, .94);
+    }
+
+    .scale {
+      display: grid;
+      align-content: space-between;
+      padding: 22px 0 37px;
+      color: #868c93;
+      font: 900 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-shadow: 0 1px #000;
+      pointer-events: none;
+    }
+
+    .scale::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 12px;
+      border-right: 1px solid rgba(255, 255, 255, .16);
+    }
+
+    .fader {
+      position: relative;
+      z-index: 3;
+      appearance: slider-vertical;
+      -webkit-appearance: slider-vertical;
+      width: 62px;
+      height: calc(100% - 24px);
+      accent-color: #a3a3a3;
+      cursor: ns-resize;
+      opacity: 0;
+    }
+
+    .fader-handle {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: var(--knob-top, 32%);
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 58px;
+      border: 1px solid #242424;
+      border-radius: 5px;
+      background:
+        repeating-linear-gradient(0deg, rgba(30, 30, 30, .38) 0 2px, rgba(255, 255, 255, .72) 2px 6px),
+        linear-gradient(90deg, #565656 0%, #f7f7f7 22%, #989898 48%, #ffffff 72%, #626262 100%);
+      box-shadow: 0 8px 11px rgba(0, 0, 0, .72), inset 0 1px rgba(255, 255, 255, .86);
+      pointer-events: none;
+    }
+
+    .fader-handle::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 27px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(40, 40, 40, .42);
+      box-shadow: 0 1px rgba(255, 255, 255, .48);
+    }
+
+    .fader::-webkit-slider-runnable-track {
+      width: 1px;
+      background: transparent;
+    }
+
+    .fader::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 62px;
+      height: 62px;
+      background: transparent;
+      border: 0;
+    }
+
+    .fader::-moz-range-track {
+      background: transparent;
+      border: 0;
+    }
+
+    .fader::-moz-range-thumb {
+      width: 62px;
+      height: 62px;
+      background: transparent;
+      border: 0;
+    }
+
+    .strip.master .fader-handle {
+      background:
+        repeating-linear-gradient(0deg, rgba(70, 5, 5, .34) 0 2px, rgba(255, 190, 190, .4) 2px 5px),
+        linear-gradient(90deg, #99251e 0%, #ff8078 28%, #c93431 50%, #ffb2ac 73%, #8d1e18 100%);
+    }
+
+    .channel-id {
+      position: absolute;
+      bottom: 0;
+      left: 7px;
+      color: #f1f1f1;
+      font-weight: 900;
+      font-size: 13px;
+      text-shadow: 0 1px #000;
+    }
+
+    .tag {
+      display: grid;
+      place-items: center;
+      border-top: 2px solid #d46a2e;
+      background: linear-gradient(#353a40, #23272d);
+      color: #f6f6f6;
+      font-weight: 900;
+      font-size: 17px;
+      letter-spacing: 0;
+      text-shadow: 0 2px 2px #000;
+      line-height: 1;
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .strip.selected .tag {
+      background: linear-gradient(#ee904b, #c95e28);
+      color: #fff;
+    }
+
+    .strip.master .tag {
+      color: #f5e829;
+      font-size: 16px;
+    }
+
+    .master-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 7px;
+      background: #22272d;
+    }
+
+    .play,
+    .rec {
+      height: 28px;
+      border: 1px solid #0b0d0f;
+      border-radius: 4px;
+      background: linear-gradient(#f3f3f3, #8c949c);
+      box-shadow: inset 0 1px #fff, 0 2px 4px rgba(0, 0, 0, .55);
+    }
+
+    .play::before {
+      content: "";
+      display: inline-block;
+      margin-top: 2px;
+      border-left: 13px solid #20d139;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .45));
+    }
+
+    .rec::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8a2426;
+      box-shadow: inset 0 1px rgba(255, 255, 255, .26);
+      opacity: .65;
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --strip: 98px;
+      }
+
+      .mixer-page {
+        grid-template-rows: 58px minmax(0, 1fr);
+      }
+
+      .topbar {
+        gap: 7px;
+      }
+
+      .nav button {
+        min-width: 78px;
+        font-size: 13px;
+      }
+
+      .clock {
+        min-width: 120px;
+      }
+
+      .tag {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="round-screws" aria-hidden="true">
+    <span class="screw tl"></span>
+    <span class="screw tr"></span>
+    <span class="screw bl"></span>
+    <span class="screw br"></span>
+  </div>
+
+  <main class="mixer-page" aria-label="Ui mixer">
+    <header class="topbar">
+      <button class="meter-icon" type="button" aria-label="Meters">
+        <span></span><span></span><span></span><span></span>
+      </button>
+      <nav class="nav" aria-label="Mixer modes">
+        <button type="button" class="active" data-mode="mix">MIX / GAIN</button>
+        <button type="button" data-mode="edit">EDIT</button>
+        <button type="button" data-mode="aux">AUX SENDS</button>
+        <button type="button" data-mode="fx">FX SENDS</button>
+      </nav>
+      <button class="transport" type="button" aria-label="Play">▶</button>
+      <button class="gear" type="button" aria-label="Settings">⚙</button>
+      <div class="top-spacer"></div>
+      <div class="grill" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="clock" id="clock">2024/07/25</div>
+      <div class="ui-logo">Ui</div>
+    </header>
+
+    <section class="board-scroll" aria-label="水平捲動音軌">
+      <div class="board" id="board"></div>
+    </section>
+  </main>
+
+  <template id="stripTemplate">
+    <article class="strip" draggable="true">
+      <div class="readout-wrap"><div class="readout">0.0 dB</div></div>
+      <div class="trim"><div class="trim-track"></div></div>
+      <div class="buttons">
+        <button type="button" class="small-btn mute"><span>MUTE</span></button>
+        <button type="button" class="small-btn solo"><span>SOLO</span></button>
+      </div>
+      <div class="fader-section">
+        <div class="meter"><div class="leds"></div></div>
+        <div class="fader-wrap">
+          <div class="fader-slot"></div>
+          <div class="fader-handle"></div>
+          <input class="fader" type="range" min="-80" max="10" step=".1" value="-18" orient="vertical">
+          <div class="channel-id">CH 1</div>
+        </div>
+        <div class="scale">
+          <span>0</span><span>-6</span><span>-12</span><span>-24</span><span>-40</span><span>-50</span><span>-60</span><span>-70</span><span>-80</span>
+        </div>
+      </div>
+      <div class="tag">維那1</div>
+    </article>
+  </template>
+
+  <template id="masterTemplate">
+    <article class="strip master">
+      <div class="readout-wrap"><div class="readout"><span style="color:#ff3434;margin-right:12px">M</span>0.0 dB</div></div>
+      <div class="trim"><div class="trim-track"></div></div>
+      <div class="master-controls">
+        <button class="play" type="button" aria-label="Play"></button>
+        <button class="rec" type="button" aria-label="Record"></button>
+      </div>
+      <div class="fader-section">
+        <div class="meter"><div class="leds"></div></div>
+        <div class="meter"><div class="leds"></div></div>
+        <div class="fader-wrap">
+          <div class="fader-slot"></div>
+          <div class="fader-handle"></div>
+          <input class="fader" type="range" min="-80" max="10" step=".1" value="-20" orient="vertical">
+          <div class="channel-id">L&nbsp;&nbsp;R</div>
+        </div>
+      </div>
+      <div class="tag">MASTER</div>
+    </article>
+  </template>
+
+  <script>
+    const board = document.getElementById("board");
+    const stripTemplate = document.getElementById("stripTemplate");
+    const masterTemplate = document.getElementById("masterTemplate");
+    const clock = document.getElementById("clock");
+
+    const modes = {
+      mix: "MIX / GAIN",
+      edit: "EDIT",
+      aux: "AUX SENDS",
+      fx: "FX SENDS"
+    };
+
+    let currentMode = "mix";
+    let selectedId = "ch-1";
+    let draggedId = null;
+
+    const channels = [
+      ["維那1", 0.5, 56, false],
+      ["維那2", -80, 4, false],
+      ["維那3", -80, 5, false],
+      ["悅眾1", -0.1, 44, false],
+      ["主法有線", 1.0, 58, false],
+      ["電腦", 0.4, 52, false],
+      ["1F來", -80, 12, true],
+      ["2F來", -80, 18, true],
+      ["消災柱1", 1.0, 45, false],
+      ["寶鐘鼓", 1.0, 53, false],
+      ["主法1", 0.6, 57, false],
+      ["主法2", 1.5, 62, false],
+      ["無線3", 1.0, 54, false],
+      ["無線4", 0.3, 48, false],
+      ["超薦柱1", 1.1, 60, false],
+      ["超薦柱2", 0.2, 55, false]
+    ].map((item, index) => ({
+      id: `ch-${index + 1}`,
+      name: item[0],
+      value: item[1],
+      gain: item[1] + 3,
+      aux: item[1] - 10,
+      fx: item[1] - 16,
+      meter: item[2],
+      pan: 50,
+      mute: item[3],
+      solo: false
+    }));
+
+    const master = {
+      id: "master",
+      name: "MASTER",
+      value: 0,
+      gain: 0,
+      aux: 0,
+      fx: 0,
+      meter: 68,
+      pan: 50,
+      mute: false,
+      solo: false
+    };
+
+    function modeField() {
+      if (currentMode === "aux") return "aux";
+      if (currentMode === "fx") return "fx";
+      if (currentMode === "edit") return "gain";
+      return "value";
+    }
+
+    function readoutValue(channel) {
+      const value = channel[modeField()];
+      if (value <= -79.8) return "-∞";
+      return `${value.toFixed(1)} dB`;
+    }
+
+    function faderValue(channel) {
+      return Math.max(-80, Math.min(10, channel[modeField()]));
+    }
+
+    function knobTop(value) {
+      const pct = (Number(value) + 80) / 90;
+      return `${85 - pct * 72}%`;
+    }
+
+    function setFaderValue(channel, raw) {
+      channel[modeField()] = Number(raw);
+    }
+
+    function addLeds(container) {
+      container.innerHTML = "";
+      for (let i = 0; i < 28; i += 1) {
+        container.appendChild(document.createElement("span"));
+      }
+    }
+
+    function meterLevel(channel) {
+      if (channel.mute) return 0;
+      const valueLift = Math.max(0, channel.value + 80) * .32;
+      const soloLift = channel.solo ? 9 : 0;
+      return Math.max(3, Math.min(96, channel.meter + valueLift + soloLift));
+    }
+
+    function render() {
+      board.innerHTML = "";
+      channels.forEach((channel, index) => board.appendChild(createStrip(channel, index)));
+      board.appendChild(createMasterStrip());
+      updateTopbar();
+    }
+
+    function createStrip(channel, index) {
+      const strip = stripTemplate.content.firstElementChild.cloneNode(true);
+      strip.dataset.id = channel.id;
+      strip.classList.toggle("selected", selectedId === channel.id);
+      strip.classList.toggle("dragging", draggedId === channel.id);
+
+      const readout = strip.querySelector(".readout");
+      const trim = strip.querySelector(".trim-track");
+      const mute = strip.querySelector(".mute");
+      const solo = strip.querySelector(".solo");
+      const meter = strip.querySelector(".meter");
+      const leds = strip.querySelector(".leds");
+      const fader = strip.querySelector(".fader");
+      const handle = strip.querySelector(".fader-handle");
+      const ch = strip.querySelector(".channel-id");
+      const tag = strip.querySelector(".tag");
+
+      readout.textContent = readoutValue(channel);
+      trim.style.setProperty("--pan", `${channel.pan}%`);
+      mute.classList.toggle("on", channel.mute);
+      solo.classList.toggle("on", channel.solo);
+      meter.style.setProperty("--level", `${meterLevel(channel)}%`);
+      if (index === 7) meter.classList.add("blue");
+      addLeds(leds);
+      fader.value = faderValue(channel);
+      handle.style.setProperty("--knob-top", knobTop(fader.value));
+      fader.setAttribute("aria-label", `${channel.name} fader`);
+      ch.textContent = `CH ${index + 1}`;
+      tag.textContent = channel.name;
+
+      if (channel.mute) {
+        const note = document.createElement("div");
+        note.className = "meter-note";
+        note.textContent = "M";
+        strip.querySelector(".fader-section").appendChild(note);
+      }
+
+      strip.addEventListener("click", event => {
+        if (event.target.classList.contains("fader")) return;
+        selectedId = channel.id;
+        render();
+      });
+
+      mute.addEventListener("click", event => {
+        event.stopPropagation();
+        channel.mute = !channel.mute;
+        selectedId = channel.id;
+        render();
+      });
+
+      solo.addEventListener("click", event => {
+        event.stopPropagation();
+        channel.solo = !channel.solo;
+        selectedId = channel.id;
+        render();
+      });
+
+      fader.addEventListener("input", event => {
+        selectedId = channel.id;
+        setFaderValue(channel, event.target.value);
+        channel.meter = 16 + Math.random() * 64;
+        readout.textContent = readoutValue(channel);
+        handle.style.setProperty("--knob-top", knobTop(event.target.value));
+        meter.style.setProperty("--level", `${meterLevel(channel)}%`);
+        document.querySelectorAll(".strip").forEach(node => {
+          node.classList.toggle("selected", node.dataset.id === selectedId);
+        });
+      });
+
+      strip.addEventListener("dragstart", event => {
+        draggedId = channel.id;
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", channel.id);
+        strip.classList.add("dragging");
+      });
+
+      strip.addEventListener("dragend", () => {
+        draggedId = null;
+        document.querySelectorAll(".strip").forEach(node => node.classList.remove("dragging", "drop-before", "drop-after"));
+      });
+
+      strip.addEventListener("dragover", event => {
+        if (!draggedId || draggedId === channel.id) return;
+        event.preventDefault();
+        const rect = strip.getBoundingClientRect();
+        const before = event.clientX < rect.left + rect.width / 2;
+        strip.classList.toggle("drop-before", before);
+        strip.classList.toggle("drop-after", !before);
+      });
+
+      strip.addEventListener("dragleave", () => {
+        strip.classList.remove("drop-before", "drop-after");
+      });
+
+      strip.addEventListener("drop", event => {
+        event.preventDefault();
+        const rect = strip.getBoundingClientRect();
+        moveChannel(draggedId, channel.id, event.clientX < rect.left + rect.width / 2);
+        render();
+      });
+
+      return strip;
+    }
+
+    function createMasterStrip() {
+      const strip = masterTemplate.content.firstElementChild.cloneNode(true);
+      strip.dataset.id = master.id;
+      strip.classList.toggle("selected", selectedId === master.id);
+
+      const readout = strip.querySelector(".readout");
+      const meters = strip.querySelectorAll(".meter");
+      const fader = strip.querySelector(".fader");
+      const handle = strip.querySelector(".fader-handle");
+
+      readout.lastChild.textContent = readoutValue(master);
+      meters.forEach((meter, index) => {
+        meter.style.setProperty("--level", `${Math.min(96, meterLevel(master) + index * 4)}%`);
+        addLeds(meter.querySelector(".leds"));
+      });
+      fader.value = faderValue(master);
+      handle.style.setProperty("--knob-top", knobTop(fader.value));
+
+      strip.addEventListener("click", event => {
+        if (event.target.classList.contains("fader")) return;
+        selectedId = master.id;
+        render();
+      });
+
+      fader.addEventListener("input", event => {
+        selectedId = master.id;
+        setFaderValue(master, event.target.value);
+        master.meter = 36 + Math.random() * 52;
+        readout.lastChild.textContent = readoutValue(master);
+        handle.style.setProperty("--knob-top", knobTop(event.target.value));
+        meters.forEach((meter, index) => {
+          meter.style.setProperty("--level", `${Math.min(96, meterLevel(master) + index * 4)}%`);
+        });
+      });
+
+      return strip;
+    }
+
+    function moveChannel(sourceId, targetId, before) {
+      if (!sourceId || sourceId === targetId) return;
+      const sourceIndex = channels.findIndex(channel => channel.id === sourceId);
+      const targetIndex = channels.findIndex(channel => channel.id === targetId);
+      if (sourceIndex < 0 || targetIndex < 0) return;
+      const [moving] = channels.splice(sourceIndex, 1);
+      const afterRemovalTarget = channels.findIndex(channel => channel.id === targetId);
+      channels.splice(before ? afterRemovalTarget : afterRemovalTarget + 1, 0, moving);
+    }
+
+    function updateTopbar() {
+      document.querySelectorAll(".nav button").forEach(button => {
+        button.classList.toggle("active", button.dataset.mode === currentMode);
+      });
+    }
+
+    document.querySelectorAll(".nav button").forEach(button => {
+      button.addEventListener("click", () => {
+        currentMode = button.dataset.mode;
+        render();
+      });
+    });
+
+    document.querySelector(".transport").addEventListener("click", () => {
+      channels.forEach(channel => channel.meter = 12 + Math.random() * 70);
+      render();
+    });
+
+    document.querySelector(".gear").addEventListener("click", () => {
+      const selected = channels.find(channel => channel.id === selectedId);
+      if (!selected) return;
+      const next = prompt("修改音軌名稱", selected.name);
+      if (next && next.trim()) {
+        selected.name = next.trim();
+        render();
+      }
+    });
+
+    setInterval(() => {
+      const date = new Date();
+      clock.textContent = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}`;
+      channels.concat(master).forEach(channel => {
+        const next = channel.mute ? 0 : 8 + Math.random() * 76;
+        channel.meter = channel.meter * .78 + next * .22;
+      });
+      document.querySelectorAll(".strip").forEach(strip => {
+        const channel = channels.concat(master).find(item => item.id === strip.dataset.id);
+        if (!channel) return;
+        strip.querySelectorAll(".meter").forEach((meter, index) => {
+          meter.style.setProperty("--level", `${Math.min(96, meterLevel(channel) + index * 4)}%`);
+        });
+      });
+    }, 500);
+
+    render();
+  </script>
+</body>
+</html>
