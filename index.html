@@ -161,8 +161,8 @@
             let selectedOuts = []; 
             let currentTask = 1; 
             
-            // 使用陣列來管理 6 個任務的結果
-            let taskResults = [null, null, null, null, null, null, null]; 
+            // 使用陣列來管理 7 個任務的結果
+            let taskResults = [null, null, null, null, null, null, null, null]; 
 
             const inButtons = document.querySelectorAll('.in-btn');
             const outButtons = document.querySelectorAll('.out-btn');
@@ -241,7 +241,7 @@
 
                 let isCorrect = false;
 
-                // 任務判斷邏輯 (1~6題)
+                // 任務判斷邏輯 (1~7題)
                 if (currentTask === 1) isCorrect = (arraysEqual(selectedIns, [1]) && arraysEqual(selectedOuts, [8]));
                 else if (currentTask === 2) isCorrect = (arraysEqual(selectedIns, [3]) && arraysEqual(selectedOuts, [8]));
                 else if (currentTask === 3) isCorrect = (arraysEqual(selectedIns, [3]) && arraysEqual(selectedOuts, [1]));
@@ -264,8 +264,8 @@
                     dynamicOutLeftImg.parentElement.classList.replace('border-gray-800', 'border-green-500');
                 }
 
-                // 自動跳下一題 (改為小於6)
-                if (currentTask < 6) {
+                // 自動跳下一題 (改為小於7)
+                if (currentTask < 7) {
                     currentTask++;
                     const nextRadio = document.querySelector(`input[name="task_mode"][value="${currentTask}"]`);
                     nextRadio.checked = true;
@@ -325,7 +325,7 @@
                 let statusHtml = '<div class="flex flex-wrap gap-x-4 gap-y-1 mb-2 border-b border-gray-700 pb-2">';
                 
                 let hasResults = false;
-                for(let i=1; i<=6; i++) {
+                for(let i=1; i<=7; i++) {
                     if (taskResults[i] === 'correct') {
                         statusHtml += `<div class="text-green-400 font-bold text-sm">🎉 任務${i}: 答對</div>`;
                         hasResults = true;
