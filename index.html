@@ -18,12 +18,10 @@
         .black-cell { background-color: #1e293b; color: #ffffff; }
         .screen-img { opacity: 0; transition: opacity 0.5s ease-in-out; }
         .screen-img.show { opacity: 1; }
-        .task-container { max-height: 220px; overflow-y: auto; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #4b5563 #1f2937; }
-        .task-container::-webkit-scrollbar { width: 8px; }
-        .task-container::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
-        .task-container::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 4px; }
+        .task-container { padding-right: 10px; }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
 
     <header class="bg-gray-800 border-b border-gray-700 p-4 shadow-md z-10">
@@ -41,7 +39,7 @@
         
         <div class="xl:w-3/5 flex flex-col gap-4">
             <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-lg flex flex-col">
-                <h2 class="text-lg font-bold text-yellow-400 mb-3 shrink-0">任務說明</h2>
+                <h2 class="text-lg font-bold text-yellow-400 mb-3 shrink-0">任務說明（共7題）</h2>
                 
                 <div class="task-container text-gray-300 space-y-3 text-sm md:text-base mb-4 flex-1">
                     <label class="flex items-start gap-2 cursor-pointer">
@@ -99,6 +97,7 @@
                 <div class="absolute bottom-2 right-2 w-3 h-3 rounded-full bg-gray-400 shadow-inner"></div>
 
                 <div class="flex-1 grid grid-rows-2 gap-y-8">
+ 
                     <div>
                         <div class="flex justify-between px-2 mb-2">
                             <script>for(let i=1; i<=8; i++) document.write(`<span class="text-orange-400 font-bold text-xs md:text-sm w-10 text-center">IN<br>${i}</span>`);</script>
@@ -122,7 +121,7 @@
                         <thead><tr><th>編 號</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
                         <tbody>
                             <tr><td class="font-bold">IN</td><td>禪堂<br>SP-1</td><td>禪堂東<br>SP-2</td><td>禪堂<br>NB</td><td>禪堂<br>無線</td><td>禪堂<br>DV</td><td>講堂<br>筆電</td><td>講堂<br>DV</td><td>主控<br>NB</td></tr>
-                            <tr><td class="font-bold">OUT</td><td>禪堂</td><td>講堂<br>東單</td><td>講堂<br>西單</td><td style="font-size: 0.65rem;">知客室<br>兒童室</td><td>會議室</td><td>備用</td><td class="black-cell">C畫面<br>(PVW)</td><td class="black-cell">D畫面<br>(PVW/REC)</td></tr>
+                            <tr><td class="font-bold">OUT</td><td>禪堂</td><td>講堂<br>西單</td><td>講堂<br>東單</td><td style="font-size: 0.65rem;">知客室<br>兒童室</td><td>會議室</td><td>備用</td><td class="black-cell">C畫面<br>(PVW)</td><td class="black-cell">D畫面<br>(PVW/REC)</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -151,6 +150,7 @@
                     <div class="absolute inset-0 color-bars"></div>
                     <img id="dynamic-out-img" src="" alt="任務畫面右" class="absolute inset-0 w-full h-full object-cover screen-img z-0">
                 </div>
+                
             </div>
         </div>
     </main>
@@ -170,6 +170,15 @@
             const resetBtn = document.getElementById('reset-btn');
             const confirmBtn = document.getElementById('confirm-btn'); 
             const taskRadios = document.querySelectorAll('input[name="task_mode"]');
+            const resultModal = document.getElementById('result-modal');
+            const resultTitle = document.getElementById('result-title');
+            const resultIcon = document.getElementById('result-icon');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            
+            // 設定點擊確認按鈕時，隱藏視窗
+            closeModalBtn.addEventListener('click', () => {
+                resultModal.classList.add('hidden');
+            });
 
             const dynamicOutImg = document.getElementById('dynamic-out-img');
             const dynamicOutLeftImg = document.getElementById('dynamic-out-left-img');
@@ -289,11 +298,20 @@
                         if (taskResults[i] === 'correct') correctCount++;
                     }
                 }
-
+                
                 if (answeredCount === 7) {
                     setTimeout(() => {
-                        if (correctCount === 7) alert("🎉 恭喜你順利通關！");
-                        else alert(`僅對${correctCount}題，下次再加油喔！`);
+                        if (correctCount === 7) {
+                            resultIcon.textContent = "🎉";
+                            resultTitle.innerHTML = "恭喜你順利通關！";
+                            resultTitle.className = "text-4xl md:text-5xl font-bold text-green-400 mb-6 leading-tight"; 
+                        } else {
+                            resultIcon.textContent = "💪";
+                            resultTitle.innerHTML = `僅對 ${correctCount} 題<br><span class="text-2xl text-gray-300 mt-2 block">下次再加油喔！</span>`;
+                            resultTitle.className = "text-4xl md:text-5xl font-bold text-red-400 mb-6 leading-tight";
+                        }
+                        // 顯示彈出視窗
+                        resultModal.classList.remove('hidden');
                     }, 300);
                 }
             });
@@ -355,5 +373,15 @@
             }
         });
     </script>
+    <!-- 結算彈出視窗 (預設隱藏) -->
+    <div id="result-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-gray-800 border-2 border-yellow-400 p-8 rounded-2xl shadow-[0_0_30px_rgba(250,204,21,0.3)] text-center max-w-lg w-full mx-4 transform transition-all">
+            <div id="result-icon" class="text-7xl mb-4">🎉</div>
+            <h2 id="result-title" class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">恭喜你順利通關！</h2>
+            <button id="close-modal-btn" class="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-3 rounded-lg font-bold text-xl shadow-lg transition-colors mt-2">
+                確認
+            </button>
+        </div>
+    </div>
 </body>
 </html>
