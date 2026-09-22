@@ -46,27 +46,31 @@
                 <div class="task-container text-gray-300 space-y-3 text-sm md:text-base mb-4 flex-1">
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="1" class="mt-1 w-4 h-4 accent-yellow-400" checked>
-                        <span><strong class="text-white">任務一：</strong>串流禪堂畫面。</span>
+                        <span><strong class="text-white">任務一：</strong>串流禪堂畫面到電子看板。</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="2" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務二：</strong>禪修班錄影。</span>
+                        <span><strong class="text-white">任務二：</strong>錄影住持法師禪修班上課簡報畫面修班錄影。</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="3" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務三：</strong>禪修班投影。</span>
+                        <span><strong class="text-white">任務三：</strong>投影禪修班住持法師上課畫面。</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="4" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務四：</strong>用無線圖傳放兒童班/培訓簡報。(提示：可複選輸出)</span>
+                        <span><strong class="text-white">任務四：</strong>投影及錄影兒童班/培訓簡報。（使用無線圖傳）(提示：可複選輸出)</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="5" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務五：</strong>2樓講堂看禪堂畫面。(提示：可複選輸出)</span>
+                        <span><strong class="text-white">任務五：</strong>2樓講堂東單及西單看禪堂高速球畫面。(提示：可複選輸出)</span>
                     </label>
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="radio" name="task_mode" value="6" class="mt-1 w-4 h-4 accent-yellow-400">
-                        <span><strong class="text-white">任務六：</strong>音響室放影片。(提示：可複選輸出)</span>
+                        <span><strong class="text-white">任務六：</strong>從音響室主控筆電放影片給禪堂投影機。(提示：可複選輸出)</span>
+                    </label>
+                    <label class="flex items-start gap-2 cursor-pointer">
+                        <input type="radio" name="task_mode" value="7" class="mt-1 w-4 h-4 accent-yellow-400">
+                        <span><strong class="text-white">任務七：</strong>二樓講堂西單看禪堂現場畫面，二樓講堂東單看住持法師簡報畫面。(提示：可複選輸出)</span>
                     </label>
                     </div>
 
@@ -171,7 +175,7 @@
             const dynamicOutLeftImg = document.getElementById('dynamic-out-left-img');
             
             const inNames = ["", "禪堂SP-1", "禪堂東SP-2", "禪堂NB", "禪堂無線", "禪堂DV", "講堂筆電", "講堂DV", "主控NB"];
-            const outNames = ["", "禪堂", "講堂東單", "講堂西單", "知客室/兒童室", "會議室", "備用", "C畫面", "D畫面"];
+            const outNames = ["", "禪堂", "講堂西單", "講堂東單", "知客室/兒童室", "會議室", "備用", "C畫面", "D畫面"];
 
             function arraysEqual(a, b) {
                 if (a.length !== b.length) return false;
@@ -244,6 +248,7 @@
                 else if (currentTask === 4) isCorrect = (arraysEqual(selectedIns, [4]) && arraysEqual(selectedOuts, [1, 8]));
                 else if (currentTask === 5) isCorrect = (arraysEqual(selectedIns, [1]) && arraysEqual(selectedOuts, [2, 3]));
                 else if (currentTask === 6) isCorrect = (arraysEqual(selectedIns, [8]) && arraysEqual(selectedOuts, [1, 8]));
+                else if (currentTask === 7) isCorrect = (arraysEqual(selectedIns, [1,3]) && arraysEqual(selectedOuts, [2, 3]));
 
                 taskResults[currentTask] = isCorrect ? 'correct' : 'wrong';
 
@@ -275,19 +280,19 @@
                 
                 checkState();
 
-                // 結算小視窗 (改為6題)
+                // 結算小視窗 (改為7題)
                 let answeredCount = 0;
                 let correctCount = 0;
-                for (let i = 1; i <= 6; i++) {
+                for (let i = 1; i <= 7; i++) {
                     if (taskResults[i] !== null) {
                         answeredCount++;
                         if (taskResults[i] === 'correct') correctCount++;
                     }
                 }
 
-                if (answeredCount === 6) {
+                if (answeredCount === 7) {
                     setTimeout(() => {
-                        if (correctCount === 6) alert("🎉 恭喜你順利通關！");
+                        if (correctCount === 7) alert("🎉 恭喜你順利通關！");
                         else alert(`僅對${correctCount}題，下次再加油喔！`);
                     }, 300);
                 }
